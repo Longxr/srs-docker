@@ -33,6 +33,9 @@ EXPOSE 1935 1985 8080
 COPY --from=build /usr/local/bin/ffmpeg /usr/local/srs/objs/ffmpeg/bin/ffmpeg
 # SRS binary, config files and srs-console.
 COPY --from=build /usr/local/srs /usr/local/srs
-# Default workdir and command.
+# Add non-root user
 WORKDIR /usr/local/srs
+RUN chmod 777 -R /usr/local/srs && groupadd -g 1000 srs3 && useradd -rm -s /bin/bash -g srs3 -u 1000 srs3
+USER srs3
+# Default workdir and command.
 CMD ["./objs/srs", "-c", "conf/srs.conf"]
